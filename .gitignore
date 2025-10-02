@@ -40,3 +40,6 @@ Thumbs.db
 # Cache directories
 __pycache__/
 .cache/
+
+# WARP documentation (local only)
+WARP.md
