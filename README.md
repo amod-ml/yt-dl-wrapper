@@ -80,8 +80,11 @@ sudo ln -s /path/to/yt-dl-wrapper/ytdl /usr/local/bin/ytdl
 # Download to custom directory
 ./ytdl -o ~/Videos https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-# Download audio only (converts to MP3 128kbps)
+# Download audio only (converts to MP3 128kbps with transcription)
 ./ytdl -a https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+# Download audio with Spanish transcription
+./ytdl -a -l es https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
 # Interactive mode - prompts for URL
 ./ytdl
@@ -96,7 +99,7 @@ sudo ln -s /path/to/yt-dl-wrapper/ytdl /usr/local/bin/ytdl
 | Option | Description |
 |--------|-------------|
 | `-v, --video` | Download video (default mode). Prefers VP9/AV1 codecs, downloads best quality, includes subtitles/transcriptions |
-| `-a, --audio` | Download audio only. Converts to MP3 128kbps format |
+| `-a, --audio` | Download audio only. Converts to MP3 128kbps format. Includes transcription as .txt file if available |
 | `-l, --lang LANG` | Subtitle language code (default: en). Examples: en, es, fr, de, ja, ko, pt, etc. Use 'all' for all available languages |
 | `-o, --output DIR` | Output directory (default: ~/Downloads). Downloads will be saved to this directory |
 | `-h, --help` | Show help message |
@@ -166,7 +169,7 @@ This will download:
 ```bash
 ./ytdl -a https://www.youtube.com/watch?v=dQw4w9WgXcQ
 ```
-This will download and convert the audio to MP3 format at 128kbps.
+This will download and convert the audio to MP3 format at 128kbps, along with the transcription as a .txt file if available.
 
 ### Download TikTok video
 ```bash
@@ -186,6 +189,7 @@ This will download and convert the audio to MP3 format at 128kbps.
 - **Format Selection**: `bestaudio/best`
 - **Output Format**: MP3
 - **Audio Quality**: 128kbps
+- **Transcription**: Downloads and converts subtitles to plain .txt format
 - **Processing**: FFmpeg audio extraction and conversion
 
 ## Troubleshooting
@@ -219,6 +223,7 @@ By default, all downloads are saved to `~/Downloads`. You can change this with t
 
 ### Audio Mode
 - `AudioTitle.mp3` - Audio file in MP3 format (128kbps)
+- `AudioTitle.LANG.txt` - Transcription in plain text format (e.g., AudioTitle.en.txt, AudioTitle.es.txt)
 
 ## Contributing
 

@@ -29,6 +29,7 @@ OPTIONS:
 
     -a, --audio    Download audio only
                    Converts to MP3 128kbps format
+                   Includes transcription as .txt file if available
 
     -l, --lang     Subtitle language code (default: en)
                    Examples: en, es, fr, de, ja, ko, pt, etc.
@@ -53,8 +54,11 @@ EXAMPLES:
     # Download to custom directory
     ytdl -o ~/Videos https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-    # Download audio as MP3
+    # Download audio as MP3 with transcription
     ytdl -a https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+    # Download audio with Spanish transcription
+    ytdl -a -l es https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
     # Interactive mode (prompt for URL)
     ytdl
@@ -155,6 +159,7 @@ download_video() {
         --no-cookies \
         --no-cache-dir \
         --output "$output_dir/%(title)s.%(ext)s" \
+        --no-overwrites \
         --progress \
         "$url"
     
@@ -175,7 +180,8 @@ download_video() {
 # Function to download audio
 download_audio() {
     local url="$1"
-    local output_dir="$2"
+    local sub_lang="$2"
+    local output_dir="$3"
     
     # Create output directory if it doesn't exist
     mkdir -p "$output_dir"
@@ -190,9 +196,15 @@ download_audio() {
         --extract-audio \
         --audio-format mp3 \
         --audio-quality 128K \
+        --write-subs \
+        --write-auto-subs \
+        --sub-format srt \
+        --convert-subs txt \
+        --sub-langs "$sub_lang" \
         --no-cookies \
         --no-cache-dir \
         --output "$output_dir/%(title)s.%(ext)s" \
+        --no-overwrites \
         --progress \
         "$url"
     
@@ -203,6 +215,7 @@ download_audio() {
         print_success "Audio downloaded successfully"
         echo "Location: ${output_dir}"
         echo "Format: MP3 128kbps"
+        echo "Transcription: ${sub_lang}.txt"
     else
         echo ""
         print_error "Download failed with exit code: $exit_code"
@@ -289,7 +302,7 @@ main() {
             download_video "$URL" "$SUB_LANG" "$OUTPUT_DIR"
             ;;
         audio)
-            download_audio "$URL" "$OUTPUT_DIR"
+            download_audio "$URL" "$SUB_LANG" "$OUTPUT_DIR"
             ;;
         *)
             print_error "Invalid mode: $MODE"
