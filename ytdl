@@ -133,6 +133,22 @@ validate_url() {
     return 0
 }
 
+# Function to convert SRT subtitles to plain text
+convert_srt_to_txt() {
+    local output_dir="$1"
+    
+    # Find all .srt files in the output directory
+    find "$output_dir" -name "*.srt" -type f 2>/dev/null | while read -r srt_file; do
+        local txt_file="${srt_file%.srt}.txt"
+        
+        # Convert SRT to plain text by removing timestamps and sequence numbers
+        sed -e '/^[0-9]*$/d' -e '/^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]/d' -e '/^$/d' "$srt_file" > "$txt_file"
+        
+        # Remove the original SRT file
+        rm -f "$srt_file"
+    done
+}
+
 # Function to download video
 download_video() {
     local url="$1"
@@ -199,7 +215,6 @@ download_audio() {
         --write-subs \
         --write-auto-subs \
         --sub-format srt \
-        --convert-subs txt \
         --sub-langs "$sub_lang" \
         --no-cookies \
         --no-cache-dir \
@@ -212,6 +227,9 @@ download_audio() {
     
     if [ $exit_code -eq 0 ]; then
         echo ""
+        # Convert SRT subtitles to plain text
+        convert_srt_to_txt "$output_dir"
+        
         print_success "Audio downloaded successfully"
         echo "Location: ${output_dir}"
         echo "Format: MP3 128kbps"
