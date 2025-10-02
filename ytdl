@@ -68,18 +68,18 @@ ${YELLOW}EXAMPLES:${NC}
     ytdl -a
 
 ${YELLOW}FEATURES:${NC}
-    ✓ Video and audio download modes
-    ✓ Automatic transcription/subtitle download
-    ✓ Prefers modern codecs (VP9, AV1)
-    ✓ Privacy-focused (no cookies, no cache)
-    ✓ MP3 conversion for audio (128kbps)
-    ✓ Supports 1000+ websites including:
+    * Video and audio download modes
+    * Automatic transcription/subtitle download
+    * Prefers modern codecs (VP9, AV1)
+    * Privacy-focused (no cookies, no cache)
+    * MP3 conversion for audio (128kbps)
+    * Supports 1000+ websites including:
       YouTube, Facebook, Instagram, TikTok,
       Twitter, Vimeo, Reddit, and many more
 
 ${YELLOW}REQUIREMENTS:${NC}
-    • yt-dlp
-    • ffmpeg
+    * yt-dlp
+    * ffmpeg
 
 ${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}
 EOF
@@ -88,19 +88,19 @@ EOF
 
 # Function to print colored messages
 print_info() {
-    echo -e "${BLUE}ℹ${NC} $1"
+    echo -e "${BLUE}[INFO]${NC} $1"
 }
 
 print_success() {
-    echo -e "${GREEN}✓${NC} $1"
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
 }
 
 print_error() {
-    echo -e "${RED}✗${NC} $1" >&2
+    echo -e "${RED}[ERROR]${NC} $1" >&2
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠${NC} $1"
+    echo -e "${YELLOW}[WARNING]${NC} $1"
 }
 
 # Function to check dependencies
@@ -145,10 +145,8 @@ download_video() {
     # Create output directory if it doesn't exist
     mkdir -p "$output_dir"
     
-    print_info "Downloading video from: ${BLUE}${url}${NC}"
-    print_info "Mode: ${GREEN}VIDEO${NC} (with transcriptions)"
-    print_info "Subtitle language: ${YELLOW}${sub_lang}${NC}"
-    print_info "Output directory: ${BLUE}${output_dir}${NC}"
+    echo -e "${BLUE}Starting download...${NC}"
+    echo -e "Output: ${output_dir}"
     echo ""
     
     # Video format selection prioritizing modern codecs
@@ -165,17 +163,18 @@ download_video() {
         --no-cache-dir \
         --output "$output_dir/%(title)s.%(ext)s" \
         --progress \
-        --newline \
         "$url"
     
     local exit_code=$?
     
     if [ $exit_code -eq 0 ]; then
         echo ""
-        print_success "Download completed successfully!"
+        print_success "Video downloaded successfully"
+        echo -e "Location: ${BLUE}${output_dir}${NC}"
+        echo -e "Subtitles: ${YELLOW}${sub_lang}${NC}"
     else
         echo ""
-        print_error "Download failed with error code: $exit_code"
+        print_error "Download failed with exit code: $exit_code"
         exit $exit_code
     fi
 }
@@ -188,9 +187,9 @@ download_audio() {
     # Create output directory if it doesn't exist
     mkdir -p "$output_dir"
     
-    print_info "Downloading audio from: ${BLUE}${url}${NC}"
-    print_info "Mode: ${GREEN}AUDIO${NC} (converting to MP3 128kbps)"
-    print_info "Output directory: ${BLUE}${output_dir}${NC}"
+    echo -e "${BLUE}Starting audio download...${NC}"
+    echo -e "Output: ${output_dir}"
+    echo -e "Format: MP3 128kbps"
     echo ""
     
     yt-dlp \
@@ -202,18 +201,18 @@ download_audio() {
         --no-cache-dir \
         --output "$output_dir/%(title)s.%(ext)s" \
         --progress \
-        --newline \
         "$url"
     
     local exit_code=$?
     
     if [ $exit_code -eq 0 ]; then
         echo ""
-        print_success "Download completed successfully!"
-        print_info "Audio converted to MP3 format (128kbps)"
+        print_success "Audio downloaded successfully"
+        echo -e "Location: ${BLUE}${output_dir}${NC}"
+        echo -e "Format: ${YELLOW}MP3 128kbps${NC}"
     else
         echo ""
-        print_error "Download failed with error code: $exit_code"
+        print_error "Download failed with exit code: $exit_code"
         exit $exit_code
     fi
 }
