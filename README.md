@@ -13,7 +13,7 @@
 - **Organized Downloads** - Defaults to ~/Downloads directory, customizable output location
 - **Privacy-Focused** - No cookies, no cache, full anonymity
 - **Multi-Platform Support** - Works with YouTube, Facebook, Instagram, TikTok, Twitter, Vimeo, and 1000+ other sites
-- **Beautiful CLI** - Colorful, user-friendly command-line interface
+- **Clean CLI** - User-friendly command-line interface
 - **Modern Codecs** - Prefers VP9 and AV1 codecs when available
 - **Linux Native** - Built for Linux environments
 

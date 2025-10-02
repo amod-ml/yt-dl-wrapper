@@ -6,13 +6,6 @@
 
 set -euo pipefail
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
 # Default mode
 MODE="video"
 URL=""
@@ -22,14 +15,14 @@ OUTPUT_DIR="$HOME/Downloads"
 # Function to display help
 show_help() {
     cat << EOF
-${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}
-${GREEN}ytdl${NC} - A powerful yt-dlp wrapper
-${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ytdl - A powerful yt-dlp wrapper
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-${YELLOW}USAGE:${NC}
+USAGE:
     ytdl [OPTIONS] [URL]
 
-${YELLOW}OPTIONS:${NC}
+OPTIONS:
     -v, --video    Download video (default mode)
                    Prefers VP9/AV1 codecs, downloads best quality
                    Includes subtitles/transcriptions if available
@@ -46,28 +39,28 @@ ${YELLOW}OPTIONS:${NC}
 
     -h, --help     Show this help message
 
-${YELLOW}EXAMPLES:${NC}
-    ${GREEN}# Download video with English subtitles (default)${NC}
+EXAMPLES:
+    # Download video with English subtitles (default)
     ytdl https://www.youtube.com/watch?v=dQw4w9WgXcQ
     ytdl -v https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-    ${GREEN}# Download video with Spanish subtitles${NC}
+    # Download video with Spanish subtitles
     ytdl -v -l es https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-    ${GREEN}# Download video with all available subtitles${NC}
+    # Download video with all available subtitles
     ytdl -v -l all https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-    ${GREEN}# Download to custom directory${NC}
+    # Download to custom directory
     ytdl -o ~/Videos https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-    ${GREEN}# Download audio as MP3${NC}
+    # Download audio as MP3
     ytdl -a https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-    ${GREEN}# Interactive mode (prompt for URL)${NC}
+    # Interactive mode (prompt for URL)
     ytdl
     ytdl -a
 
-${YELLOW}FEATURES:${NC}
+FEATURES:
     * Video and audio download modes
     * Automatic transcription/subtitle download
     * Prefers modern codecs (VP9, AV1)
@@ -77,30 +70,30 @@ ${YELLOW}FEATURES:${NC}
       YouTube, Facebook, Instagram, TikTok,
       Twitter, Vimeo, Reddit, and many more
 
-${YELLOW}REQUIREMENTS:${NC}
+REQUIREMENTS:
     * yt-dlp
     * ffmpeg
 
-${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
     exit 0
 }
 
-# Function to print colored messages
+# Function to print messages
 print_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo "[INFO] $1"
 }
 
 print_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    echo "[SUCCESS] $1"
 }
 
 print_error() {
-    echo -e "${RED}[ERROR]${NC} $1" >&2
+    echo "[ERROR] $1" >&2
 }
 
 print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo "[WARNING] $1"
 }
 
 # Function to check dependencies
@@ -145,8 +138,8 @@ download_video() {
     # Create output directory if it doesn't exist
     mkdir -p "$output_dir"
     
-    echo -e "${BLUE}Starting download...${NC}"
-    echo -e "Output: ${output_dir}"
+    echo "Starting download..."
+    echo "Output: ${output_dir}"
     echo ""
     
     # Video format selection prioritizing modern codecs
@@ -170,8 +163,8 @@ download_video() {
     if [ $exit_code -eq 0 ]; then
         echo ""
         print_success "Video downloaded successfully"
-        echo -e "Location: ${BLUE}${output_dir}${NC}"
-        echo -e "Subtitles: ${YELLOW}${sub_lang}${NC}"
+        echo "Location: ${output_dir}"
+        echo "Subtitles: ${sub_lang}"
     else
         echo ""
         print_error "Download failed with exit code: $exit_code"
@@ -187,9 +180,9 @@ download_audio() {
     # Create output directory if it doesn't exist
     mkdir -p "$output_dir"
     
-    echo -e "${BLUE}Starting audio download...${NC}"
-    echo -e "Output: ${output_dir}"
-    echo -e "Format: MP3 128kbps"
+    echo "Starting audio download..."
+    echo "Output: ${output_dir}"
+    echo "Format: MP3 128kbps"
     echo ""
     
     yt-dlp \
@@ -208,8 +201,8 @@ download_audio() {
     if [ $exit_code -eq 0 ]; then
         echo ""
         print_success "Audio downloaded successfully"
-        echo -e "Location: ${BLUE}${output_dir}${NC}"
-        echo -e "Format: ${YELLOW}MP3 128kbps${NC}"
+        echo "Location: ${output_dir}"
+        echo "Format: MP3 128kbps"
     else
         echo ""
         print_error "Download failed with exit code: $exit_code"
@@ -219,11 +212,11 @@ download_audio() {
 
 # Function to prompt for URL
 prompt_url() {
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}ytdl${NC} - Interactive Mode"
-    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "ytdl - Interactive Mode"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
-    read -p "$(echo -e ${YELLOW}Enter URL:${NC} )" URL
+    read -p "Enter URL: " URL
     
     if [ -z "$URL" ]; then
         print_error "No URL provided"
