@@ -10,6 +10,7 @@
 - **Audio Download Mode** - Extracts and converts audio to MP3 (128kbps)
 - **Automatic Transcriptions** - Downloads subtitles and auto-generated transcriptions separately
 - **Configurable Subtitle Languages** - Choose specific language or download all available
+- **Organized Downloads** - Defaults to ~/Downloads directory, customizable output location
 - **Privacy-Focused** - No cookies, no cache, full anonymity
 - **Multi-Platform Support** - Works with YouTube, Facebook, Instagram, TikTok, Twitter, Vimeo, and 1000+ other sites
 - **Beautiful CLI** - Colorful, user-friendly command-line interface
@@ -76,6 +77,9 @@ sudo ln -s /path/to/yt-dl-wrapper/ytdl /usr/local/bin/ytdl
 # Download video with all available subtitles
 ./ytdl -v -l all https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
+# Download to custom directory
+./ytdl -o ~/Videos https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
 # Download audio only (converts to MP3 128kbps)
 ./ytdl -a https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
@@ -94,6 +98,7 @@ sudo ln -s /path/to/yt-dl-wrapper/ytdl /usr/local/bin/ytdl
 | `-v, --video` | Download video (default mode). Prefers VP9/AV1 codecs, downloads best quality, includes subtitles/transcriptions |
 | `-a, --audio` | Download audio only. Converts to MP3 128kbps format |
 | `-l, --lang LANG` | Subtitle language code (default: en). Examples: en, es, fr, de, ja, ko, pt, etc. Use 'all' for all available languages |
+| `-o, --output DIR` | Output directory (default: ~/Downloads). Downloads will be saved to this directory |
 | `-h, --help` | Show help message |
 
 ## Supported Platforms
@@ -133,6 +138,18 @@ This will download:
 
 # All available languages
 ./ytdl -l all https://www.youtube.com/watch?v=dQw4w9WgXcQ
+```
+
+### Download to custom directory
+```bash
+# Download to Videos folder
+./ytdl -o ~/Videos https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+# Download to specific path
+./ytdl -o /media/external/downloads https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+# Combine with other options
+./ytdl -a -o ~/Music https://www.youtube.com/watch?v=dQw4w9WgXcQ
 ```
 
 ### Download Instagram video
@@ -192,6 +209,9 @@ Some sites may have restrictions. Try:
 Not all videos have transcriptions available. The script will download them if they exist, but won't fail if they're absent.
 
 ## Output Files
+
+### Default Output Location
+By default, all downloads are saved to `~/Downloads`. You can change this with the `-o` option.
 
 ### Video Mode
 - `VideoTitle.ext` - Video file (usually .mp4, .webm, or .mkv)

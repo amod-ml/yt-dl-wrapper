@@ -17,6 +17,7 @@ NC='\033[0m' # No Color
 MODE="video"
 URL=""
 SUB_LANG="en"
+OUTPUT_DIR="$HOME/Downloads"
 
 # Function to display help
 show_help() {
@@ -40,6 +41,9 @@ ${YELLOW}OPTIONS:${NC}
                    Examples: en, es, fr, de, ja, ko, pt, etc.
                    Use 'all' to download all available languages
 
+    -o, --output   Output directory (default: ~/Downloads)
+                   Downloads will be saved to this directory
+
     -h, --help     Show this help message
 
 ${YELLOW}EXAMPLES:${NC}
@@ -52,6 +56,9 @@ ${YELLOW}EXAMPLES:${NC}
 
     ${GREEN}# Download video with all available subtitles${NC}
     ytdl -v -l all https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+    ${GREEN}# Download to custom directory${NC}
+    ytdl -o ~/Videos https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
     ${GREEN}# Download audio as MP3${NC}
     ytdl -a https://www.youtube.com/watch?v=dQw4w9WgXcQ
@@ -133,10 +140,15 @@ validate_url() {
 download_video() {
     local url="$1"
     local sub_lang="$2"
+    local output_dir="$3"
+    
+    # Create output directory if it doesn't exist
+    mkdir -p "$output_dir"
     
     print_info "Downloading video from: ${BLUE}${url}${NC}"
     print_info "Mode: ${GREEN}VIDEO${NC} (with transcriptions)"
     print_info "Subtitle language: ${YELLOW}${sub_lang}${NC}"
+    print_info "Output directory: ${BLUE}${output_dir}${NC}"
     echo ""
     
     # Video format selection prioritizing modern codecs
@@ -151,7 +163,7 @@ download_video() {
         --sub-langs "$sub_lang" \
         --no-cookies \
         --no-cache-dir \
-        --output "%(title)s.%(ext)s" \
+        --output "$output_dir/%(title)s.%(ext)s" \
         --progress \
         --newline \
         "$url"
@@ -171,9 +183,14 @@ download_video() {
 # Function to download audio
 download_audio() {
     local url="$1"
+    local output_dir="$2"
+    
+    # Create output directory if it doesn't exist
+    mkdir -p "$output_dir"
     
     print_info "Downloading audio from: ${BLUE}${url}${NC}"
     print_info "Mode: ${GREEN}AUDIO${NC} (converting to MP3 128kbps)"
+    print_info "Output directory: ${BLUE}${output_dir}${NC}"
     echo ""
     
     yt-dlp \
@@ -183,7 +200,7 @@ download_audio() {
         --audio-quality 128K \
         --no-cookies \
         --no-cache-dir \
-        --output "%(title)s.%(ext)s" \
+        --output "$output_dir/%(title)s.%(ext)s" \
         --progress \
         --newline \
         "$url"
@@ -243,6 +260,15 @@ main() {
                     exit 1
                 fi
                 ;;
+            -o|--output)
+                if [[ -n "$2" && "$2" != -* ]]; then
+                    OUTPUT_DIR="${2/#\~/$HOME}"  # Expand tilde
+                    shift 2
+                else
+                    print_error "Option -o requires a directory path argument"
+                    exit 1
+                fi
+                ;;
             -*)
                 print_error "Unknown option: $1"
                 echo "Use -h or --help for usage information"
@@ -268,10 +294,10 @@ main() {
     # Download based on mode
     case "$MODE" in
         video)
-            download_video "$URL" "$SUB_LANG"
+            download_video "$URL" "$SUB_LANG" "$OUTPUT_DIR"
             ;;
         audio)
-            download_audio "$URL"
+            download_audio "$URL" "$OUTPUT_DIR"
             ;;
         *)
             print_error "Invalid mode: $MODE"
