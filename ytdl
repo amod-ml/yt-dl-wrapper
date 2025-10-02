@@ -16,6 +16,7 @@ NC='\033[0m' # No Color
 # Default mode
 MODE="video"
 URL=""
+SUB_LANG="en"
 
 # Function to display help
 show_help() {
@@ -35,12 +36,22 @@ ${YELLOW}OPTIONS:${NC}
     -a, --audio    Download audio only
                    Converts to MP3 128kbps format
 
+    -l, --lang     Subtitle language code (default: en)
+                   Examples: en, es, fr, de, ja, ko, pt, etc.
+                   Use 'all' to download all available languages
+
     -h, --help     Show this help message
 
 ${YELLOW}EXAMPLES:${NC}
-    ${GREEN}# Download video with transcriptions${NC}
+    ${GREEN}# Download video with English subtitles (default)${NC}
     ytdl https://www.youtube.com/watch?v=dQw4w9WgXcQ
     ytdl -v https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+    ${GREEN}# Download video with Spanish subtitles${NC}
+    ytdl -v -l es https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+    ${GREEN}# Download video with all available subtitles${NC}
+    ytdl -v -l all https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
     ${GREEN}# Download audio as MP3${NC}
     ytdl -a https://www.youtube.com/watch?v=dQw4w9WgXcQ
@@ -121,9 +132,11 @@ validate_url() {
 # Function to download video
 download_video() {
     local url="$1"
+    local sub_lang="$2"
     
     print_info "Downloading video from: ${BLUE}${url}${NC}"
     print_info "Mode: ${GREEN}VIDEO${NC} (with transcriptions)"
+    print_info "Subtitle language: ${YELLOW}${sub_lang}${NC}"
     echo ""
     
     # Video format selection prioritizing modern codecs
@@ -135,7 +148,7 @@ download_video() {
         --write-subs \
         --write-auto-subs \
         --sub-format srt \
-        --sub-langs all \
+        --sub-langs "$sub_lang" \
         --no-cookies \
         --no-cache-dir \
         --output "%(title)s.%(ext)s" \
@@ -221,6 +234,15 @@ main() {
                 MODE="audio"
                 shift
                 ;;
+            -l|--lang)
+                if [[ -n "$2" && "$2" != -* ]]; then
+                    SUB_LANG="$2"
+                    shift 2
+                else
+                    print_error "Option -l requires a language code argument"
+                    exit 1
+                fi
+                ;;
             -*)
                 print_error "Unknown option: $1"
                 echo "Use -h or --help for usage information"
@@ -246,7 +268,7 @@ main() {
     # Download based on mode
     case "$MODE" in
         video)
-            download_video "$URL"
+            download_video "$URL" "$SUB_LANG"
             ;;
         audio)
             download_audio "$URL"

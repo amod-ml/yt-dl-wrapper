@@ -1,19 +1,22 @@
 # ytdl - A Powerful yt-dlp Wrapper
 
-A user-friendly bash wrapper for yt-dlp that simplifies downloading videos and audio with automatic transcription support from 1000+ websites.
+<p align="center">
+  <strong>A user-friendly bash wrapper for yt-dlp that simplifies downloading videos and audio with automatic transcription support from 1000+ websites.</strong>
+</p>
 
-## ✨ Features
+## Features
 
-- 🎥 **Video Download Mode** - Downloads best quality video with modern codec preference (VP9/AV1)
-- 🎵 **Audio Download Mode** - Extracts and converts audio to MP3 (128kbps)
-- 📝 **Automatic Transcriptions** - Downloads subtitles and auto-generated transcriptions separately
-- 🔒 **Privacy-Focused** - No cookies, no cache, full anonymity
-- 🌐 **Multi-Platform Support** - Works with YouTube, Facebook, Instagram, TikTok, Twitter, Vimeo, and 1000+ other sites
-- 🎨 **Beautiful CLI** - Colorful, user-friendly command-line interface
-- ⚡ **Modern Codecs** - Prefers VP9 and AV1 codecs when available
-- 🐧 **Linux Native** - Built for Linux environments
+- **Video Download Mode** - Downloads best quality video with modern codec preference (VP9/AV1)
+- **Audio Download Mode** - Extracts and converts audio to MP3 (128kbps)
+- **Automatic Transcriptions** - Downloads subtitles and auto-generated transcriptions separately
+- **Configurable Subtitle Languages** - Choose specific language or download all available
+- **Privacy-Focused** - No cookies, no cache, full anonymity
+- **Multi-Platform Support** - Works with YouTube, Facebook, Instagram, TikTok, Twitter, Vimeo, and 1000+ other sites
+- **Beautiful CLI** - Colorful, user-friendly command-line interface
+- **Modern Codecs** - Prefers VP9 and AV1 codecs when available
+- **Linux Native** - Built for Linux environments
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before using ytdl, ensure you have the following installed:
 
@@ -32,7 +35,7 @@ paru -S yt-dlp ffmpeg
 sudo apt install yt-dlp ffmpeg
 ```
 
-## 🚀 Installation
+## Installation
 
 1. Clone the repository:
 ```bash
@@ -56,16 +59,22 @@ Or create a symlink:
 sudo ln -s /path/to/yt-dl-wrapper/ytdl /usr/local/bin/ytdl
 ```
 
-## 📖 Usage
+## Usage
 
 ### Basic Commands
 
 ```bash
-# Download video with transcriptions (default mode)
+# Download video with English subtitles (default)
 ./ytdl https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
 # Explicitly specify video mode
 ./ytdl -v https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+# Download video with Spanish subtitles
+./ytdl -v -l es https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+# Download video with all available subtitles
+./ytdl -v -l all https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
 # Download audio only (converts to MP3 128kbps)
 ./ytdl -a https://www.youtube.com/watch?v=dQw4w9WgXcQ
@@ -84,9 +93,10 @@ sudo ln -s /path/to/yt-dl-wrapper/ytdl /usr/local/bin/ytdl
 |--------|-------------|
 | `-v, --video` | Download video (default mode). Prefers VP9/AV1 codecs, downloads best quality, includes subtitles/transcriptions |
 | `-a, --audio` | Download audio only. Converts to MP3 128kbps format |
+| `-l, --lang LANG` | Subtitle language code (default: en). Examples: en, es, fr, de, ja, ko, pt, etc. Use 'all' for all available languages |
 | `-h, --help` | Show help message |
 
-## 🌍 Supported Platforms
+## Supported Platforms
 
 ytdl works with 1000+ websites including:
 
@@ -102,16 +112,28 @@ For a complete list of supported sites, run:
 yt-dlp --list-extractors
 ```
 
-## 🎯 Examples
+## Examples
 
-### Download a YouTube video with transcriptions
+### Download a YouTube video with English subtitles
 ```bash
 ./ytdl https://www.youtube.com/watch?v=dQw4w9WgXcQ
 ```
 This will download:
 - Video file (best quality, VP9/AV1 preferred)
-- All available subtitle files (.srt format)
-- Auto-generated transcriptions if available
+- English subtitle file (.srt format)
+- Auto-generated transcription if manual subtitle unavailable
+
+### Download with specific language subtitles
+```bash
+# French subtitles
+./ytdl -l fr https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+# Japanese subtitles
+./ytdl -l ja https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+# All available languages
+./ytdl -l all https://www.youtube.com/watch?v=dQw4w9WgXcQ
+```
 
 ### Download Instagram video
 ```bash
@@ -134,7 +156,7 @@ This will download and convert the audio to MP3 format at 128kbps.
 ./ytdl https://www.tiktok.com/@username/video/1234567890
 ```
 
-## 🔧 Technical Details
+## Technical Details
 
 ### Video Mode
 - **Format Selection**: `bestvideo[vcodec^=vp9]+bestaudio/bestvideo[vcodec^=av01]+bestaudio/bestvideo+bestaudio/best`
@@ -149,7 +171,7 @@ This will download and convert the audio to MP3 format at 128kbps.
 - **Audio Quality**: 128kbps
 - **Processing**: FFmpeg audio extraction and conversion
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 ### "Missing required dependencies" error
 Install the required packages:
@@ -169,24 +191,23 @@ Some sites may have restrictions. Try:
 ### No transcriptions downloaded
 Not all videos have transcriptions available. The script will download them if they exist, but won't fail if they're absent.
 
-## 📝 Output Files
+## Output Files
 
 ### Video Mode
 - `VideoTitle.ext` - Video file (usually .mp4, .webm, or .mkv)
-- `VideoTitle.en.srt` - English subtitles (if available)
-- `VideoTitle.lang.srt` - Other language subtitles (if available)
+- `VideoTitle.LANG.srt` - Subtitle file in specified language (e.g., VideoTitle.en.srt, VideoTitle.es.srt)
 
 ### Audio Mode
 - `AudioTitle.mp3` - Audio file in MP3 format (128kbps)
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Feel free to:
 - Report bugs
 - Suggest new features
 - Submit pull requests
 
-## 📄 License
+## License
 
 MIT License
 
@@ -210,16 +231,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built on top of [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 - Uses [FFmpeg](https://ffmpeg.org/) for media processing
 
-## 📧 Contact
+## Contact
 
 - GitHub: [@amod-ml](https://github.com/amod-ml)
 - Email: amodsahabandu@icloud.com
 
 ---
 
-**Made with ❤️ for the command-line enthusiasts**
+<p align="center">
+  <strong>Made for command-line enthusiasts</strong>
+</p>
