@@ -1,0 +1,42 @@
+# Downloaded media files
+*.mp4
+*.mp3
+*.webm
+*.mkv
+*.m4a
+*.flv
+*.avi
+*.mov
+
+# Subtitle files
+*.srt
+*.vtt
+*.ass
+*.sub
+
+# Partial downloads
+*.part
+*.ytdl
+*.temp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*~
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+
+# Cache directories
+__pycache__/
+.cache/
